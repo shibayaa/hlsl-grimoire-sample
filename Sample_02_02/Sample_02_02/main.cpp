@@ -41,19 +41,19 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     // 頂点配列を定義
     SimpleVertex vertices[] = {
         {
-            {-0.5f, -0.5f, 0.0f},//左下
+            {-0.5f, -0.5f, 0.0f},//左下0
             { 1.0f, 0.0f, 0.0f }
         },
         {
-            { 0.0f, 0.5f, 0.0f },//中上
+            { -0.25f, 0.5f, 0.0f},//左上1
             { 0.0f, 1.0f, 0.0f }
         },
         {
-            { 0.5f, -0.5f, 0.0f },//右下
+            { 0.5f, 0.5f, 0.0f },//右上2
             { 0.0f, 0.0f, 1.0f }
         },
         {
-            { 0.0f, -0.75f, 0.0f },//中下
+            { 0.25f, -0.5f, 0.0f },//右下3
             { 0.0f, 1.0f, 0.0f }
         },
     };
@@ -65,8 +65,8 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     // 5. 三角形のインデックスバッファを作成
     //インデックス配列
     uint16_t indices[] = {
-        0,1,2,
-        1,2,3,
+        0,2,3,
+        0,1,2
     };
     IndexBuffer triangleIB;
     triangleIB.Init(sizeof(indices), 2);
