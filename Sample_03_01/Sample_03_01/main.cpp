@@ -26,9 +26,15 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
     triangle.Init(rootSignature);
 
     // step-1 定数バッファを作成
-
+    ConstantBuffer cb;
+    cb.Init(sizeof(Matrix));
     // step-2 ディスクリプタヒープを作成
+    DescriptorHeap ds;
+    ds.RegistConstantBuffer(0, cb);
+    ds.Commit();
 
+    float moveX = 0.0f;
+    float speed = 0.0125f;
     //////////////////////////////////////
     // 初期化を行うコードを書くのはここまで！！！
     //////////////////////////////////////
@@ -48,11 +54,17 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
         renderContext.SetRootSignature(rootSignature);
 
         // step-3 ワールド行列を作成
-
+        Matrix mWorld;
+        // mWorld.MakeTranslation(0.5f, 0.4f, 0.0f);
+        moveX = moveX + speed;
+        if (moveX > 2) {
+            moveX = -2;
+        }
+        mWorld.MakeTranslation(-moveX, 0.2f, 0.0f);
         // step-4 ワールド行列をグラフィックメモリにコピー
-
+        cb.CopyToVRAM(mWorld);
         // step-5 ディスクリプタヒープを設定
-
+        renderContext.SetDescriptorHeap(ds);
         //三角形をドロー
         triangle.Draw(renderContext);
 
@@ -66,7 +78,7 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLi
 }
 
 //ルートシグネチャの初期化
-void InitRootSignature( RootSignature& rs )
+void InitRootSignature(RootSignature& rs)
 {
     rs.Init(D3D12_FILTER_MIN_MAG_MIP_LINEAR,
         D3D12_TEXTURE_ADDRESS_MODE_WRAP,
